@@ -1,0 +1,13 @@
+- resources:
+    cpu: true
+    memory: true
+    cputemp: true
+    uptime: true
+    units: metric
+    refresh: 3000
+- datetime:
+    text_size: xl
+    format:
+      timeStyle: short
+      hourCycle: h23
+      dateStyle: short

@@ -1,0 +1,28 @@
+   title: Media Server
+   headerStyle: clean
+   background:
+     image: https://images.unsplash.com/photo-1502790671504-542ad42d5189
+     blur: md
+     saturate: 50
+     brightness: 50
+     opacity: 70
+   theme: dark
+   color: zinc
+   useEqualHeights: false
+   quicklaunch:
+     searchDescriptions: true
+     hideInternetSearch: true
+     showSearchSuggestions: true
+     hideVisitURL: true
+   hideVersion: true
+   hideErrors: true
+   statusStyle: dot
+   layout:
+     Media:
+       header: false
+       style: row
+       columns: 2
+     Tools:
+       header: false
+       style: row
+       columns: 4

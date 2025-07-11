@@ -1,0 +1,61 @@
+- Media:
+    - Jellyfin:
+        icon: jellyfin.png
+        href: http://${SERVER_IP:-localhost}:8096
+        description: Media streaming
+        siteMonitor: http://${SERVER_IP:-localhost}:8096
+        widget:
+          type: jellyfin
+          url: http://${SERVER_IP:-localhost}:8096
+          username: YOUR_JELLYFIN_USERNAME
+          password: YOUR_JELLYFIN_PASSWORD
+          fields: ["movies", "tv"]
+    - Jellyseerr:
+        icon: jellyseerr.png
+        href: http://${SERVER_IP:-localhost}:5055
+        description: Content requests
+        siteMonitor: http://${SERVER_IP:-localhost}:5055
+        widget:
+          type: overseerr
+          url: http://${SERVER_IP:-localhost}:5055
+          key: YOUR_JELLYSEERR_API_KEY
+          fields: ["processing", "pending", "approved"]
+- Tools:
+    - qBittorrent:
+        icon: qbittorrent.png
+        href: http://${SERVER_IP:-localhost}:8080
+        description: Torrent client
+        siteMonitor: http://${SERVER_IP:-localhost}:8080
+        widget:
+          type: qbittorrent
+          url: http://${SERVER_IP:-localhost}:8080
+          username: YOUR_QB_USERNAME
+          password: YOUR_QB_PASSWORD
+    - Sonarr:
+        icon: sonarr.png
+        href: http://${SERVER_IP:-localhost}:8989
+        description: TV series management
+        siteMonitor: http://${SERVER_IP:-localhost}:8989
+        widget:
+          type: sonarr
+          url: http://${SERVER_IP:-localhost}:8989
+          key: YOUR_SONARR_API_KEY
+    - Radarr:
+        icon: radarr.png
+        href: http://${SERVER_IP:-localhost}:7878
+        description: Movie management
+        siteMonitor: http://${SERVER_IP:-localhost}:7878
+        widget:
+          type: radarr
+          url: http://${SERVER_IP:-localhost}:7878
+          key: YOUR_RADARR_API_KEY
+    - Prowlarr:
+        icon: prowlarr.png
+        href: http://${SERVER_IP:-localhost}:9696
+        description: Indexer management
+        siteMonitor: http://${SERVER_IP:-localhost}:9696
+        widget:
+          type: prowlarr
+          url: http://${SERVER_IP:-localhost}:9696
+          key: YOUR_PROWLARR_API_KEY
+          fields: ["numberOfGrabs", "numberOfQueries"]
