@@ -1,110 +1,199 @@
-Media Server Setup
-   A Docker-based media server with Homepage dashboard, Jellyfin for streaming, Jellyseerr for content requests, Sonarr and Radarr for automated TV and movie downloads, qBittorrent for torrenting, Prowlarr for indexer management, and FlareSolverr for proxy support.
-Features
+# 🎬 Media Server Setup
 
-Centralized dashboard (Homepage) at http://<your-ip>:3000
-Local-only access for streaming and automation
-Configurable via environment variables
-Cron jobs to monitor Cloudflare WARP and indexer health
-Inspired by a clean, dark-themed layout
+A comprehensive Docker-based media server solution featuring a centralized dashboard, automated content management, and streaming capabilities. Built with Homepage dashboard, Jellyfin for streaming, Jellyseerr for content requests, Sonarr and Radarr for automated downloads, qBittorrent for torrenting, Prowlarr for indexer management, and FlareSolverr for proxy support.
 
-Prerequisites
+## ✨ Features
 
-Docker and Docker Compose (sudo apt install docker.io docker-compose)
-Ubuntu-based OS (tested on Lubuntu 25.04)
-Media storage directory (e.g., /media/movies, /media/shows)
-Torrent download directory (e.g., /torrents)
-Cloudflare WARP (sudo apt install cloudflare-warp)
-jq for JSON parsing (sudo apt install jq)
+- **Centralized Dashboard** - Homepage at `http://<your-ip>:3000`
+- **Local-Only Access** - Secure streaming and automation within your network
+- **Environment Configuration** - Easy setup via environment variables
+- **Automated Monitoring** - Cron jobs for Cloudflare WARP and indexer health
+- **Clean Dark Theme** - Modern, intuitive interface design
 
-Installation
+## 📋 Prerequisites
 
-Clone the repository:git clone https://github.com/yourusername/media-server.git
+Before getting started, ensure you have the following installed:
+
+- **Docker & Docker Compose**
+
+  ```bash
+  sudo apt install docker.io docker-compose
+  ```
+
+- **Ubuntu-based OS** (tested on Lubuntu 25.04)
+
+- **Storage Directories**
+
+  - Media storage: `/media/movies`, `/media/shows`
+  - Torrent downloads: `/torrents`
+
+- **Additional Tools**
+  ```bash
+  sudo apt install cloudflare-warp jq
+  ```
+
+## 🚀 Installation
+
+### 1. Clone the Repository
+
+```bash
+git clone https://github.com/yourusername/media-server.git
 cd media-server
+```
 
+### 2. Environment Configuration
 
-Copy .env.example to .env and configure:cp .env.example .env
+```bash
+cp .env.example .env
 nano .env
+```
 
+Configure the following variables:
 
-Set PUID, PGID (your user/group IDs, e.g., id -u, id -g)
-Set SERVER_IP (e.g., 192.168.1.254)
-Set MEDIA_PATH and TORRENTS_PATH to your storage paths
-Set LOG_PATH (e.g., /path/to/logs)
-Set PROWLARR_API_KEY from Prowlarr (Settings > General > Security)
+- `PUID`, `PGID` - Your user/group IDs (`id -u`, `id -g`)
+- `SERVER_IP` - Your server IP (e.g., `192.168.1.254`)
+- `MEDIA_PATH` - Path to your media storage
+- `TORRENTS_PATH` - Path to your torrent downloads
+- `LOG_PATH` - Path for log files
+- `PROWLARR_API_KEY` - From Prowlarr Settings > General > Security
 
+### 3. Setup Homepage Configuration
 
-Create Homepage config directory:mkdir -p homepage/config
+```bash
+mkdir -p homepage/config
+```
 
+### 4. Obtain API Keys and Credentials
 
-Obtain API keys and credentials:
-Jellyfin: Username/password from http://<SERVER_IP>:8096
-Jellyseerr: API key from Settings > General > API Key
-Sonarr/Radarr/Prowlarr: API keys from Settings > General > Security
-qBittorrent: Username/password from http://<SERVER_IP>:8080
+| Service                    | Location                      | Path              |
+| -------------------------- | ----------------------------- | ----------------- |
+| **Jellyfin**               | `http://<SERVER_IP>:8096`     | Username/Password |
+| **Jellyseerr**             | Settings > General            | API Key           |
+| **Sonarr/Radarr/Prowlarr** | Settings > General > Security | API Keys          |
+| **qBittorrent**            | `http://<SERVER_IP>:8080`     | Username/Password |
 
+### 5. Configure Services
 
-Update homepage/config/services.yaml with your credentials.
-Start services:docker-compose up -d
+Update `homepage/config/services.yaml` with your credentials and API keys.
 
+### 6. Launch Services
 
-Access Homepage at http://<SERVER_IP>:3000.
+```bash
+docker-compose up -d
+```
 
-Services
+### 7. Access Dashboard
 
-Homepage: Dashboard (:3000)
-Jellyfin: Media streaming (:8096)
-Jellyseerr: Content requests (:5055)
-Sonarr: TV shows (:8989)
-Radarr: Movies (:7878)
-qBittorrent: Torrents (:8080)
-Prowlarr: Indexers (:9696)
-FlareSolverr: Proxy (:8191)
+Navigate to `http://<SERVER_IP>:3000` to access your media server dashboard.
 
-Cron Jobs
-   Monitor Cloudflare WARP and indexer health every 15 minutes:
+## 🛠️ Services Overview
 
-Create scripts directory:mkdir -p scripts
+| Service          | Purpose            | Port | URL                       |
+| ---------------- | ------------------ | ---- | ------------------------- |
+| **Homepage**     | Dashboard          | 3000 | `http://<SERVER_IP>:3000` |
+| **Jellyfin**     | Media Streaming    | 8096 | `http://<SERVER_IP>:8096` |
+| **Jellyseerr**   | Content Requests   | 5055 | `http://<SERVER_IP>:5055` |
+| **Sonarr**       | TV Show Management | 8989 | `http://<SERVER_IP>:8989` |
+| **Radarr**       | Movie Management   | 7878 | `http://<SERVER_IP>:7878` |
+| **qBittorrent**  | Torrent Client     | 8080 | `http://<SERVER_IP>:8080` |
+| **Prowlarr**     | Indexer Management | 9696 | `http://<SERVER_IP>:9696` |
+| **FlareSolverr** | Proxy Service      | 8191 | `http://<SERVER_IP>:8191` |
 
+## ⏰ Automated Monitoring
 
-Copy check_warp.sh and check_indexers.sh to scripts/.
-Make scripts executable:chmod +x scripts/*.sh
+### Setup Cron Jobs
 
+Monitor Cloudflare WARP and indexer health every 15 minutes:
 
-Set up cron jobs:crontab -e
+1. **Create Scripts Directory**
 
-Add:*/15 * * * * /path/to/media-server/scripts/check_warp.sh
-*/15 * * * * /path/to/media-server/scripts/check_indexers.sh
+   ```bash
+   mkdir -p scripts
+   ```
 
+2. **Copy Monitoring Scripts**
+   Copy `check_warp.sh` and `check_indexers.sh` to the `scripts/` directory.
 
-Check logs:cat $LOG_PATH/warp_check.log
-cat $LOG_PATH/indexer_check.log
+3. **Make Scripts Executable**
 
+   ```bash
+   chmod +x scripts/*.sh
+   ```
 
+4. **Configure Cron Jobs**
 
-Configuration
+   ```bash
+   crontab -e
+   ```
 
-Edit homepage/config/services.yaml to add API keys and credentials.
-Customize homepage/config/settings.yaml for layout/theme.
-Adjust homepage/config/widgets.yaml for widgets (e.g., CPU, datetime).
-Ensure permissions:sudo chown -R $PUID:$PGID homepage scripts logs
+   Add the following lines:
+
+   ```cron
+   */15 * * * * /path/to/media-server/scripts/check_warp.sh
+   */15 * * * * /path/to/media-server/scripts/check_indexers.sh
+   ```
+
+5. **View Logs**
+   ```bash
+   cat $LOG_PATH/warp_check.log
+   cat $LOG_PATH/indexer_check.log
+   ```
+
+## ⚙️ Configuration
+
+### Homepage Customization
+
+- **Services**: Edit `homepage/config/services.yaml` for API keys and credentials
+- **Settings**: Customize `homepage/config/settings.yaml` for layout and theme
+- **Widgets**: Modify `homepage/config/widgets.yaml` for system widgets
+
+### Permissions Setup
+
+```bash
+sudo chown -R $PUID:$PGID homepage scripts logs
 sudo chmod -R 755 homepage scripts logs
+```
 
+## 🔧 Troubleshooting
 
+### Common Issues
 
-Troubleshooting
+#### Check Service Logs
 
-Check logs: docker logs <service>
-Verify Docker socket: ls -l /var/run/docker.sock
-Ensure PUID/PGID match your user: id
-Test API connectivity, e.g.:curl -H "X-Api-Key: YOUR_SONARR_API_KEY" http://<SERVER_IP>:8989/api/v3/system/status
+```bash
+docker logs <service-name>
+```
 
+#### Verify Docker Socket
 
-Verify WARP: warp-cli status
+```bash
+ls -l /var/run/docker.sock
+```
 
-Notes
+#### Confirm User Permissions
 
-Services are local-only by default, safe for home networks.
-Replace yourusername in the clone command with your GitHub username.
-Optionally configure Cloudflare WARP for secure indexer traffic.
+```bash
+id
+```
 
+#### Test API Connectivity
+
+```bash
+curl -H "X-Api-Key: YOUR_SONARR_API_KEY" http://<SERVER_IP>:8989/api/v3/system/status
+```
+
+#### Check WARP Status
+
+```bash
+warp-cli status
+```
+
+## 📝 Important Notes
+
+- **Security**: Services are configured for local-only access, making them safe for home networks
+- **GitHub**: Replace `yourusername` in the clone command with your actual GitHub username
+- **Optional**: Configure Cloudflare WARP for secure indexer traffic routing
+
+## 🤝 Contributing
+
+Feel free to submit issues, feature requests, or pull requests to improve this media server setup!
