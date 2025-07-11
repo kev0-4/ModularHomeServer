@@ -1,0 +1,6 @@
+# Run Cloudflare WARP check every 15 minutes
+   */15 * * * * /path/to/media-server/scripts/check_warp.sh
+
+   # Run Prowlarr indexer check every 15 minutes
+   */15 * * * * /path/to/media-server/scripts/check_indexers.sh
+#Run these in yout terminal
